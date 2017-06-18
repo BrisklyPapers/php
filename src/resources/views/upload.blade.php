@@ -1,8 +1,10 @@
+<!doctype html>
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet" href="css/external/bootstrap.min.css">
     <link rel="stylesheet" href="css/external/bootstrap-theme.min.css">
@@ -28,7 +30,9 @@
     <div id="listDropped"></div>
     <div id="list"></div>
     <button type="button" class="btn btn-success" id="upload">Upload</button>
+    <div id="response"></div>
 </div>
+
 
 <script src="js/external/jquery.min.js"></script>
 <script src="js/external/bootstrap.min.js"></script>

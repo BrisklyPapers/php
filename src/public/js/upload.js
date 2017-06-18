@@ -1,4 +1,10 @@
 $(window).load(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $('#drop').click(function () {
         $('#fileBox').trigger('click');
     });
@@ -26,16 +32,16 @@ $(window).load(function () {
         formData.append('action', 'upload');
 
         $.ajax({
-            url: '/upload.php',
+            url: '/upload',
             data: formData,
-            type: "POST",
+            type: "post",
             contentType: false,
             processData: false,
             success: function(jqXHR, textStatus) {
-                console.log(textStatus, jqXHR);
+                document.getElementById("response").innerHTML = textStatus + "<br/>" + jqXHR.toString();
             },
             error: function(jqXHR, textStatus) {
-                console.log(textStatus, jqXHR);
+                document.getElementById("response").innerHTML = textStatus + "<br/>" + jqXHR.toString();
             }
         })
     });

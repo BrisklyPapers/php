@@ -1,32 +1,106 @@
 $(window).load(function () {
     $('#drop').click(function () {
-        console.log('click');
         $('#fileBox').trigger('click');
     });
     //Remove item
     $('.fileCont span').click(function () {
         $(this).remove();
     });
+
+
+    $('#upload').click(function () {
+        var formData = new FormData(document.getElementById('upload-form'));
+
+        for (var i = 0; i < uploadedFiles.length; i++) {
+            formData.append('files[]', uploadedFiles[i]);
+        }
+
+        $("#tags").tagsinput('items').forEach(function(element) {
+            formData.append("tags["+element.value+"]", element.text);
+        });
+
+        formData.append('action', 'upload');
+
+        $.ajax({
+            url: '/upload.php',
+            data: formData,
+            type: "POST",
+            contentType: false,
+            processData: false,
+            success: function(jqXHR, textStatus) {
+                console.log(textStatus, jqXHR);
+            },
+            error: function(jqXHR, textStatus) {
+                console.log(textStatus, jqXHR);
+            }
+        })
+    });
 });
+
+var uploadedFiles = [];
+
 if (window.FileReader) {
     var drop;
     addEventHandler(window, 'load', function () {
         var status = document.getElementById('status');
         drop = document.getElementById('drop');
+        fileBox = document.getElementById('fileBox');
         var list = document.getElementById('list');
+        var listDropped = document.getElementById('listDropped');
 
         function cancel(e) {
             if (e.preventDefault) {
                 e.preventDefault();
             }
+        }
+
+        function onDragOver(e) {
+            cancel(e);
+            this.className = 'hover';
+            return false;
+        }
+        function onDragEnd(e) {
+            cancel(e);
+            this.className = '';
             return false;
         }
 
         // Tells the browser that we *can* drop on this target
-        addEventHandler(drop, 'dragover', cancel);
+        addEventHandler(drop, 'dragover', onDragOver);
+        addEventHandler(drop, 'dragend', onDragEnd);
+        addEventHandler(drop, 'dragleave', onDragEnd);
         addEventHandler(drop, 'dragenter', cancel);
 
+        function printFileInfo(list, file) {
+            this.className = '';
+
+            var fileCont = document.createElement('div');
+            fileCont.className = "fileCont";
+            list.appendChild(fileCont);
+
+            var newFile = document.createElement('div');
+            newFile.innerHTML = file.name;
+            newFile.className = "fileName";
+            fileCont.appendChild(newFile);
+
+            var fileSize = document.createElement('div');
+            fileSize.className = "fileSize";
+            fileSize.innerHTML = Math.round(file.size / 1024) + ' KB';
+            fileCont.appendChild(fileSize);
+        }
+        
+        addEventHandler(fileBox, 'change', function (e) {
+            var files = e.target.files;
+
+            list.innerHTML = "";
+            for (var i = 0, file; file = files[i]; i++) {
+                printFileInfo(list, file);
+            }
+        });
+
         addEventHandler(drop, 'drop', function (e) {
+            this.className = '';
+
             e = e || window.event; // get window.event if e argument missing (in IE)
             if (e.preventDefault) {
                 e.preventDefault();
@@ -38,43 +112,12 @@ if (window.FileReader) {
                 var file = files[i];
                 var reader = new FileReader();
 
-                //attach event handlers here...
+                uploadedFiles.push(file);
 
                 reader.readAsDataURL(file);
                 addEventHandler(reader, 'loadend', function (e, file) {
                     var bin = this.result;
-                    var fileCont = document.createElement('div');
-                    fileCont.className = "fileCont";
-                    list.appendChild(fileCont);
-
-                    var fileNumber = list.getElementsByTagName('img').length + 1;
-                    status.innerHTML = fileNumber < files.length ? 'Loaded 100% of file ' + fileNumber + ' of ' + files.length + '...' : 'Done loading. processed ' + fileNumber + ' files.';
-
-                    var img = document.createElement("img");
-                    img.file = file;
-                    img.src = bin;
-                    img.className = "thumb";
-                    fileCont.appendChild(img);
-
-                    var newFile = document.createElement('div');
-                    newFile.innerHTML = file.name;
-                    newFile.className = "fileName";
-                    fileCont.appendChild(newFile);
-
-                    var fileSize = document.createElement('div');
-                    fileSize.className = "fileSize";
-                    fileSize.innerHTML = Math.round(file.size / 1024) + ' KB';
-                    fileCont.appendChild(fileSize);
-
-                    var progress = document.createElement('div');
-                    progress.className = "progress";
-                    progress.innerHTML = '<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="100" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%"></div>';
-                    fileCont.appendChild(progress);
-
-                    var remove = document.createElement('div');
-                    remove.className = "remove";
-                    remove.innerHTML = '<span class="glyphicon glyphicon-remove"></div>';
-                    list.appendChild(remove);
+                    printFileInfo(listDropped, file);
                 }.bindToEventHandler(file));
             }
             return false;
@@ -91,9 +134,8 @@ if (window.FileReader) {
         };
     });
 } else {
-    document.getElementById('status').innerHTML = 'Your browser does not support the HTML5 FileReader.';
+    document.getElementById('msg-drop').innerHTML = "Click here to upload a file.";
 }
-
 
 function addEventHandler(obj, evt, handler) {
     if (obj.addEventListener) {
@@ -107,39 +149,3 @@ function addEventHandler(obj, evt, handler) {
         obj['on' + evt] = handler;
     }
 }
-
-
-//Not plugged yet
-var bar = $('.progress-bar');
-$(function () {
-    $(bar).each(function () {
-        bar_width = $(this).attr('aria-valuenow');
-        $(this).width(bar_width + '%');
-    });
-});
-
-var states = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    // `states` is an array of state names defined in "The Basics"
-    local: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-        'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-        'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-        'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-        'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-        'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-        'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-        'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-        'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-    ]
-});
-states.initialize();
-
-$('#bloodhound .typeahead').tagsinput({
-    typeaheadjs: {
-        name: 'states',
-        displayKey: 'name',
-        valueKey: 'name',
-        source: states.ttAdapter()
-    }
-});

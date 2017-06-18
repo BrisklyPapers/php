@@ -9,7 +9,11 @@ $(window).load(function () {
 
 
     $('#upload').click(function () {
-        var formData = new FormData(document.getElementById('upload-form'));
+        var formData = new FormData();
+
+        jQuery.each($('#fileBox')[0].files, function(i, file) {
+            formData.append('files[]', file);
+        });
 
         for (var i = 0; i < uploadedFiles.length; i++) {
             formData.append('files[]', uploadedFiles[i]);

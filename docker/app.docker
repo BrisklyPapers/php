@@ -1,0 +1,18 @@
+FROM php:7-fpm
+
+RUN apt-get update
+
+RUN apt-get install -y curl nano git npm nodejs-legacy zlib1g-dev libzip-dev libicu-dev \
+    libmcrypt-dev mysql-client libcurl4-gnutls-dev
+
+RUN docker-php-ext-install mcrypt pdo_mysql zip curl intl pdo_mysql pdo
+
+RUN docker-php-ext-enable mcrypt pdo_mysql zip curl intl pdo_mysql pdo
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN npm install -g bower
+
+RUN npm install -g grunt-cli
+
+WORKDIR /var/www

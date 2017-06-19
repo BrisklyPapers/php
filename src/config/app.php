@@ -177,6 +177,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * project specific providers
+         */
+        App\Providers\ElasticsearchServiceProvider::class,
     ],
 
     /*

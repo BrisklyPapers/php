@@ -38,10 +38,10 @@ $(window).load(function () {
             contentType: false,
             processData: false,
             success: function(jqXHR, textStatus) {
-                document.getElementById("response").innerHTML = textStatus + "<br/>" + jqXHR.toString();
+                document.getElementById("response").innerHTML = textStatus + "<br/><pre>" + JSON.stringify(jqXHR, null, 2) + "</pre>";
             },
             error: function(jqXHR, textStatus) {
-                document.getElementById("response").innerHTML = textStatus + "<br/>" + jqXHR.toString();
+                document.getElementById("response").innerHTML = textStatus + "<br/><pre>" + jqXHR.responseText + "</pre>";
             }
         })
     });

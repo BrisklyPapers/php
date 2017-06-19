@@ -51,6 +51,7 @@ class UploadController extends Controller
             }
         }
 
+
         return $response->setData($data);
     }
 
@@ -67,6 +68,11 @@ class UploadController extends Controller
         return $bin;
     }
 
+    private function toText(UploadedFile $file)
+    {
+        return shell_exec(config('ocr.ocr_pdf') . " " . $file->getRealPath() . " de");
+    }
+
     /**
      * @param UploadedFile $file
      * @return Attachment
@@ -75,8 +81,10 @@ class UploadController extends Controller
     {
         $doc = new Attachment();
         $doc->fileName = $file->getClientOriginalName();
-        $doc->content = $file->getClientMimeType();
+        $doc->contentType = $file->getClientMimeType();
         $doc->content = $this->getContents($file);
+        $doc->text = $this->toText($file);
+
         return $doc;
     }
 }

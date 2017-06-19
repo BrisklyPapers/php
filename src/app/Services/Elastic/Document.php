@@ -11,6 +11,7 @@ class Document
     const TYPE = 'documents';
     const FIELD_DOCUMENT = 'file';
     const FIELD_TAGS = 'tags';
+    const FIELD_TEXT = 'text';
     /**
      * @var Client
      */
@@ -42,6 +43,7 @@ class Document
                     '_content_type' => $document->contentType,
                     '_name' => $document->fileName
                 ],
+                self::FIELD_TEXT => $document->text,
                 self::FIELD_TAGS => $tags
             ]
         ];

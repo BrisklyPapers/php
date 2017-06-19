@@ -16,4 +16,8 @@ class Attachment
      * @var string
      */
     public $content;
+    /**
+     * @var string
+     */
+    public $text;
 }

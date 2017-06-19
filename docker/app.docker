@@ -15,4 +15,10 @@ RUN npm install -g bower
 
 RUN npm install -g grunt-cli
 
+# OCR
+
+# https://diging.atlassian.net/wiki/display/DCH/Tutorial%3A+Text+Extraction+and+OCR+with+Tesseract+and+ImageMagick
+# https://ubuntu.flowconsult.at/linux/ocr-tesseract-text-recognition-ubuntu-14-04/
+RUN apt-get install -y imagemagick tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu poppler-utils
+
 WORKDIR /var/www

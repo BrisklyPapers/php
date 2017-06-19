@@ -17,7 +17,7 @@ $(window).load(function () {
     $('#upload').click(function () {
         var formData = new FormData();
 
-        jQuery.each($('#fileBox')[0].files, function(i, file) {
+        jQuery.each($('#fileBox')[0].files, function (i, file) {
             formData.append('files[]', file);
         });
 
@@ -25,8 +25,8 @@ $(window).load(function () {
             formData.append('files[]', uploadedFiles[i]);
         }
 
-        $("#tags").tagsinput('items').forEach(function(element) {
-            formData.append("tags["+element.value+"]", element.text);
+        $("#tags").tagsinput('items').forEach(function (element) {
+            formData.append("tags[" + element.value + "]", element.text);
         });
 
         formData.append('action', 'upload');
@@ -37,15 +37,48 @@ $(window).load(function () {
             type: "post",
             contentType: false,
             processData: false,
-            success: function(jqXHR, textStatus) {
+            success: function (jqXHR, textStatus) {
                 document.getElementById("response").innerHTML = textStatus + "<br/><pre>" + JSON.stringify(jqXHR, null, 2) + "</pre>";
             },
-            error: function(jqXHR, textStatus) {
+            error: function (jqXHR, textStatus) {
                 document.getElementById("response").innerHTML = textStatus + "<br/><pre>" + jqXHR.responseText + "</pre>";
             }
         })
     });
 });
+
+
+
+fileSink = (function ($, $drop) {
+    var fileSink = {
+        cancel: function (e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+        },
+
+        onDragOver: function (e) {
+            this.cancel(e);
+            $drop.addClass('hover');
+            return false;
+        },
+
+        onDragEnd: function (e) {
+            this.cancel(e);
+            $drop.removeClass('hover');
+            return false;
+        },
+
+        setEventHandlers: function () {
+            $drop.on("dragover", $.proxy(this.onDragOver, this));
+            $drop.on("dragend", $.proxy(this.onDragEnd, this));
+        }
+    };
+
+    fileSink.setEventHandlers();
+
+    return fileSink;
+}) ($, $("#drop"));
 
 var uploadedFiles = [];
 
@@ -57,29 +90,6 @@ if (window.FileReader) {
         fileBox = document.getElementById('fileBox');
         var list = document.getElementById('list');
         var listDropped = document.getElementById('listDropped');
-
-        function cancel(e) {
-            if (e.preventDefault) {
-                e.preventDefault();
-            }
-        }
-
-        function onDragOver(e) {
-            cancel(e);
-            this.className = 'hover';
-            return false;
-        }
-        function onDragEnd(e) {
-            cancel(e);
-            this.className = '';
-            return false;
-        }
-
-        // Tells the browser that we *can* drop on this target
-        addEventHandler(drop, 'dragover', onDragOver);
-        addEventHandler(drop, 'dragend', onDragEnd);
-        addEventHandler(drop, 'dragleave', onDragEnd);
-        addEventHandler(drop, 'dragenter', cancel);
 
         function printFileInfo(list, file) {
             this.className = '';
@@ -98,7 +108,7 @@ if (window.FileReader) {
             fileSize.innerHTML = Math.round(file.size / 1024) + ' KB';
             fileCont.appendChild(fileSize);
         }
-        
+
         addEventHandler(fileBox, 'change', function (e) {
             var files = e.target.files;
 

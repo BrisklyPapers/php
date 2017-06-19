@@ -1,9 +1,9 @@
-var cities = new Bloodhound({
+var tags = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     prefetch: 'citynames.json'
 });
-cities.initialize();
+tags.initialize();
 
 var elt = $('#tags');
 elt.tagsinput({
@@ -12,9 +12,9 @@ elt.tagsinput({
     freeInput: true,
     confirmKeys: [13, 32, 44, 188],
     typeaheadjs: {
-        name: 'cities',
+        name: 'tags',
         displayKey: 'text',
-        source: cities.ttAdapter()
+        source: tags.ttAdapter()
     }
 });
 //    elt.tagsinput('add', { "value": 1 , "text": "Amsterdam"   , "continent": "Europe"    });

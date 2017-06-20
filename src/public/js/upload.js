@@ -17,7 +17,7 @@ $(window).load(function () {
     $('#upload').click(function () {
         var formData = new FormData();
 
-        jQuery.each($('#fileBox')[0].files, function (i, file) {
+        $.each($('#fileBox')[0].files, function (i, file) {
             formData.append('files[]', file);
         });
 
@@ -32,13 +32,26 @@ $(window).load(function () {
         formData.append('action', 'upload');
 
         $.ajax({
-            url: '/upload',
+            url: '/document',
             data: formData,
             type: "post",
             contentType: false,
             processData: false,
             success: function (jqXHR, textStatus) {
-                document.getElementById("response").innerHTML = textStatus + "<br/><pre>" + JSON.stringify(jqXHR, null, 2) + "</pre>";
+                uploadedFiles = [];
+                $('#fileBox').val("");
+
+                $('#list').empty();
+                $('#listDropped').empty();
+
+                $.each(jqXHR, function(i, file) {
+                    $('<a>', {
+                        title: file.fileName,
+                        text: file.fileName,
+                        href: file.url,
+                        target: "_blank"
+                    }).prependTo($('#response'));
+                });
             },
             error: function (jqXHR, textStatus) {
                 document.getElementById("response").innerHTML = textStatus + "<br/><pre>" + jqXHR.responseText + "</pre>";

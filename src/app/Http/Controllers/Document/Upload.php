@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Document;
 
 use App\Models\Elastic\Attachment;
 use App\Services\Elastic\Document;
@@ -8,29 +8,36 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class UploadController extends Controller
+class Upload extends Controller
 {
     /**
      * @var Document
      */
     private $elasticDoc;
+    /**
+     * @var UrlGenerator
+     */
+    private $url;
 
     /**
      * UploadController constructor.
      * @param Document $elasticDoc
+     * @param UrlGenerator $url
      */
-    public function __construct(Document $elasticDoc)
+    public function __construct(Document $elasticDoc, UrlGenerator $url)
     {
         $this->elasticDoc = $elasticDoc;
+        $this->url = $url;
     }
 
     /**
      * Show the profile for the given user.
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
     public function upload(Request $request)
     {
@@ -44,10 +51,17 @@ class UploadController extends Controller
         /** @var UploadedFile $file */
         foreach ($request->files->all() as $files) {
             foreach ($files as $file) {
-                $data['result'] = $this->elasticDoc->storeDocument(
+                $result = $this->elasticDoc->storeDocument(
                     $this->createAttachment($file),
                     $tags
                 );
+
+                if ($result['_shards']['successful']) {
+                    $data[] = ['fileName' => $file->getClientOriginalName(), 'url' => $this->url->route('download-document', ['id' => $result['_id']])];
+                } else {
+                    $response->setStatusCode(400);
+                    $data[] = ['fileName' => $file->getClientOriginalName()];
+                }
             }
         }
 

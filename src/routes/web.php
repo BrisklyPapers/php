@@ -15,4 +15,6 @@ Route::get('/', function () {
     return view('upload');
 });
 
-Route::post('upload', 'UploadController@upload');
+Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')->name('upload-document');
+
+Route::get('/document/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');

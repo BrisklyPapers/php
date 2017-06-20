@@ -52,4 +52,31 @@ class Document
 
         return $response;
     }
+
+    /**
+     * @param string $id
+     * @return Attachment
+     */
+    public function loadById($id)
+    {
+        $params = [
+            'index' => self::INDEX,
+            'type' => self::TYPE,
+            'id' => $id,
+        ];
+
+        $response = $this->elastic->get($params);
+
+        if (!$response['found']) {
+            throw new \InvalidArgumentException("$id not found");
+        }
+
+        $attachment = new Attachment();
+        $attachment->content = base64_decode($response['_source']['file']['_content']);
+        $attachment->contentType = $response['_source']['file']['_content_type'];
+        $attachment->fileName = $response['_source']['file']['_name'];
+        $attachment->text = $response['_source']['text'];
+
+        return $attachment;
+    }
 }

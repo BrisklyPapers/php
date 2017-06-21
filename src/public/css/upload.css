@@ -1,6 +1,4 @@
-body{
-    color:#666;
-}
+
 #drop {
     border: 1px dashed #ccc;
     width: 100%;
@@ -138,9 +136,4 @@ body{
 }
 .twitter-typeahead {
     display: inline !important;
-}
-
-.docbox {
-    width: 450px;
-    margin: 4px auto;
 }

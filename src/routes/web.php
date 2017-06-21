@@ -12,9 +12,15 @@
 */
 
 Route::get('/', function () {
+    return view('search');
+});
+
+Route::get('/upload', function () {
     return view('upload');
 });
 
 Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')->name('upload-document');
 
-Route::get('/document/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');
+Route::get('/document/search/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');
+
+Route::get('/document/search', '\App\Http\Controllers\Document\Search@search')->name('search-document');

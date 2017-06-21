@@ -1,0 +1,8 @@
+body{
+    color:#666;
+}
+.docbox {
+    width: 100%;
+    max-width: 1000px;
+    margin: 4px 0 0 50px;
+}

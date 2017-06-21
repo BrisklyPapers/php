@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/external/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/external/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="css/external/bootstrap-tagsinput-typeahead.css">
+    <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/upload.css">
 
     <title>Upload Files</title>

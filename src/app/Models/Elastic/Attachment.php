@@ -20,4 +20,8 @@ class Attachment
      * @var string
      */
     public $text;
+    /**
+     * @var string
+     */
+    public $id;
 }

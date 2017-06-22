@@ -1,11 +1,18 @@
 <div class="navbar">
-    <div class="navbar-inner">
-        <a id="logo" href="/">Single Malt</a>
-        <ul class="nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/projects">Projects</a></li>
-            <li><a href="/contact">Contact</a></li>
-        </ul>
+    <div class="container">
+
+        <a id="logo" href="/" class="navbar-item">
+            Logo
+        </a>
+
+        <div class="search-boc navbar-item">
+            <form id="search-form">
+                <input type="text" id="search" autofocus autocomplete="off"/>
+            </form>
+        </div>
+
+        <a id="logo" href="/" class="navbar-item">
+            Save File
+        </a>
     </div>
 </div>

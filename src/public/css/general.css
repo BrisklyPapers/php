@@ -6,3 +6,35 @@ body{
     max-width: 1000px;
     margin: 4px 0 0 50px;
 }
+
+.navbar {
+    padding: 25px 0;
+    background-color: #f1f1f1;
+}
+
+.navbar-item {
+    margin-right: 15px;
+    float: left !important;
+}
+
+input .navbar-item {
+    height: 46px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px
+}
+
+footer {
+    position: fixed;
+    bottom: 0px;
+    padding: 8px 0;
+    background-color: #f1f1f1;
+    width: 100%;
+    font-size: 12px;
+    border-top: 1px solid #b7b7b7;
+}
+
+pre {
+    background-color: #f1f1f1;
+}

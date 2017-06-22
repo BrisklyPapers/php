@@ -1,8 +1,13 @@
-<meta charset="utf-8">
-<meta name="description" content="">
-<meta name="author" content="Scotch">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="description" content="Archive and Find your documents in seconds">
+<meta name="author" content="Sebastian Detert">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>Super Cool Layouts</title>
+<title>SwiftLib</title>
 
-<!-- load bootstrap from a cdn -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/3.0.3/css/bootstrap-combined.min.css">
+<link rel="stylesheet" href="css/external/bootstrap.min.css">
+<link rel="stylesheet" href="css/external/bootstrap-theme.min.css">
+<link rel="stylesheet" href="css/general.css">
+<link rel="stylesheet" href="css/search.css">

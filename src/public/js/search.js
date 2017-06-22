@@ -24,12 +24,19 @@ $(window).load(function () {
                     $('#response').empty();
 
                     $.each(jqXHR, function(i, file) {
-                        $('<a>', {
+                        $link = $('<a>', {
                             title: file.fileName,
                             text: file.fileName,
                             href: file.url,
                             target: "_blank"
-                        }).prependTo($('#response'));
+                        });
+                        $text = $('<pre>', {
+                            text: file.text
+                        });
+                        $div = $('<div>');
+                        $div.append($link).append($('<br/>')).append($text);
+
+                        $('#response').prepend($div);
                     });
                 },
                 error: function (jqXHR, textStatus) {

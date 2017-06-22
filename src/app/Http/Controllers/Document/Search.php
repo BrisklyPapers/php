@@ -52,10 +52,31 @@ class Search extends Controller
         foreach ($documents as $document) {
             $data[] = [
                 'fileName' => $document->fileName,
-                'url' => $this->url->route('download-document', ['id' => $document->id])
+                'url' => $this->url->route('download-document', ['id' => $document->id]),
+                'text' => $this->getAbstract($document->text),
+                'tags' => $document->tags
             ];
         }
 
         return new JsonResponse($data);
+    }
+
+    private function getAbstract($text)
+    {
+        $words = preg_split('/\b/', $text);
+        array_filter($words);
+
+        $result = '';
+        $len = 0;
+        $count = count($words);
+
+        while($len < 100 && $count) {
+            $word = array_shift($words);
+            $result .= ' ' . $word;
+            --$count;
+            $len += strlen($word);
+        }
+
+        return ltrim($result);
     }
 }

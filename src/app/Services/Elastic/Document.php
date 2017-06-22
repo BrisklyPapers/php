@@ -125,6 +125,7 @@ class Document
         $attachment->contentType = $response['_source']['file']['_content_type'];
         $attachment->fileName = $response['_source']['file']['_name'];
         $attachment->text = $response['_source']['text'];
+        $attachment->tags = $response['_source']['tags'];
         $attachment->id = isset($response['_id']) ? $response['_id'] : null;
 
         return $attachment;

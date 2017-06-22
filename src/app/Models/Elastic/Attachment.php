@@ -21,6 +21,10 @@ class Attachment
      */
     public $text;
     /**
+     * @var string[]
+     */
+    public $tags = array();
+    /**
      * @var string
      */
     public $id;

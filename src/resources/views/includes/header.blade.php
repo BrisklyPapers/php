@@ -2,7 +2,7 @@
     <div class="container">
 
         <a id="logo" href="/" class="navbar-item">
-            Logo
+            Briskly Papers
         </a>
 
         <div class="search-boc navbar-item">

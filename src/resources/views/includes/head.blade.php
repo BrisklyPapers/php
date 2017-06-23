@@ -5,7 +5,7 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>SwiftLib</title>
+<title>Brisky Papers</title>
 
 <link rel="stylesheet" href="css/external/bootstrap.min.css">
 <link rel="stylesheet" href="css/external/bootstrap-theme.min.css">

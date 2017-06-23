@@ -7,7 +7,7 @@ use Elasticsearch\Client;
 
 class Document
 {
-    const INDEX = 'swiftlib';
+    const INDEX = 'brisklypapers';
     const TYPE = 'documents';
     const FIELD_DOCUMENT = 'file';
     const FIELD_TAGS = 'tags';

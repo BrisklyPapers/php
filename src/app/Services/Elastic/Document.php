@@ -130,4 +130,37 @@ class Document
 
         return $attachment;
     }
+
+    public function searchTags($text)
+    {
+        $params = [
+            'index' => self::INDEX,
+            'type' => self::TYPE,
+            'body' => [
+                'size' => 0,
+                'aggs' => [
+                    'tag_names' => [
+                        'terms' => ['field' => self::FIELD_TAGS],
+                    ]
+                ]
+            ],
+        ];
+
+        $result = $this->elastic->search($params);
+
+        $lowerText = mb_strtolower($text);
+        $strlen = mb_strlen($text);
+
+        $tags = array();
+        if (isset($result['aggregations']['tag_names']['buckets'])) {
+            foreach ($result['aggregations']['tag_names']['buckets'] as $tag) {
+                if ($lowerText !== mb_substr(mb_strtolower($tag['key']), 0, $strlen)) {
+                    continue;
+                }
+                $tags[] = ['value' => $tag['key'], 'text' => $tag['key']];
+            }
+        }
+
+        return $tags;
+    }
 }

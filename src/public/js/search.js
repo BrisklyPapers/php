@@ -13,6 +13,8 @@ $(window).load(function () {
     var wto;
 
     $('#search').keypress(function () {
+        $('#upload_area').hide();
+
         clearTimeout(wto);
         wto = setTimeout(function() {
 

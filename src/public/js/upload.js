@@ -12,7 +12,10 @@ $(window).load(function () {
     $('.fileCont span').click(function () {
         $(this).remove();
     });
-
+    $('#menu_upload').click(function() {
+        $('#upload_area').show();
+        $('#response').empty();
+    });
 
     $('#upload').click(function () {
         var formData = new FormData();
@@ -59,7 +62,6 @@ $(window).load(function () {
         })
     });
 });
-
 
 
 fileSink = (function ($, $drop) {

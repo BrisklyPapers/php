@@ -34,9 +34,15 @@ $params = [
     'body' => [
         'properties' => [
             'file' => [
-                'type' => 'attachment'
-            ]
-        ]
+                'type' => 'attachment',
+            ],
+            'tags' => [
+                'type' => 'keyword',
+            ],
+            'text' => [
+                'type' => 'text',
+            ],
+        ],
     ]
 ];
 

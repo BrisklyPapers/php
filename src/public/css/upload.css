@@ -137,3 +137,7 @@
 .twitter-typeahead {
     display: inline !important;
 }
+
+#upload_area {
+    display: none;
+}

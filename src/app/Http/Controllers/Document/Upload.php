@@ -53,7 +53,7 @@ class Upload extends Controller
             foreach ($files as $file) {
                 $result = $this->elasticDoc->storeDocument(
                     $this->createAttachment($file),
-                    $tags
+                    array_values($tags)
                 );
 
                 if ($result['_shards']['successful']) {
@@ -84,7 +84,7 @@ class Upload extends Controller
 
     private function toText(UploadedFile $file)
     {
-        return shell_exec(config('ocr.ocr_pdf') . " " . $file->getRealPath() . " de");
+        return shell_exec(config('ocr.ocr_pdf') . " " . $file->getRealPath() . " deu"); // eng : english, deu: german
     }
 
     /**

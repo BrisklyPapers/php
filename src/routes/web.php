@@ -28,3 +28,5 @@ Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')->name('
 Route::get('/document/search/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');
 
 Route::get('/document/search', '\App\Http\Controllers\Document\Search@search')->name('search-document');
+
+Route::get('/tags', '\App\Http\Controllers\Tags@search')->name('search-tags');

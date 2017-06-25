@@ -16,20 +16,21 @@ fi
 OUTFILE=$(mktemp /tmp/ocr.XXXXXXXXX)
 
 # First attempt ot use pdftotext to extract embedded text.
-pdftotext "$FILEPATH" "$OUTFILE"
+pdftotext "$FILEPATH" "${OUTFILE}.txt"
 FILESIZE=$(wc -w < "$OUTFILE")
 # If that fails, try Tesseract.
 if [[ $FILESIZE -lt $MIN_WORDS ]]
-    then
-        # Use imagemagick to convert the PDF to a high-rest multi-page TIFF.
-        convert -density 300 "$FILEPATH" -depth 8 -strip -background white \
-                -alpha off ./temp.tiff > /dev/null 2>&1
-        # Then use Tesseract to perform OCR on the tiff.
-        tesseract ./temp.tiff "$OUTFILE" -l $LANG > /dev/null 2>&1
-        # We don't need then intermediate TIFF file, so discard it.
-        rm ./temp.tiff
-        FILESIZE=$(wc -w < "$OUTFILE")
+then
+    # Use imagemagick to convert the PDF to a high-rest multi-page TIFF.
+    convert -density 300 "$FILEPATH" -depth 8 -strip -background white \
+            -alpha off ./temp.tiff > /dev/null 2>&1
+    # Then use Tesseract to perform OCR on the tiff.
+    # Tesseract adds .txt to $OUTFILE
+    tesseract ./temp.tiff "$OUTFILE" -l $LANG > /dev/null 2>&1
+    # We don't need then intermediate TIFF file, so discard it.
+    rm ./temp.tiff
+    FILESIZE=$(wc -w < "${OUTFILE}.txt")
 fi
 
-cat $OUTFILE
-rm $OUTFILE
+cat "${OUTFILE}.txt"
+rm "${OUTFILE}.txt"

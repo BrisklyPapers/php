@@ -11,8 +11,8 @@
             </form>
         </div>
 
-        <a id="logo" href="/" class="navbar-item">
+        <span class="navbar-item" id="menu_upload">
             Save File
-        </a>
+        </span>
     </div>
 </div>

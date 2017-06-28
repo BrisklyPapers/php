@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Document;
 
 use App\Http\Controllers\Document\Parse;
 use Illuminate\Console\Command;
 
-class DocumentParseText extends Command
+class ParseText extends Command
 {
     /**
      * The name and signature of the console command.
@@ -20,6 +20,7 @@ class DocumentParseText extends Command
      * @var string
      */
     protected $description = 'Command description';
+
     /**
      * @var Parse
      */

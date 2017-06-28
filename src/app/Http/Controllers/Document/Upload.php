@@ -82,7 +82,6 @@ class Upload extends Controller
         $doc->fileName = $file->getClientOriginalName();
         $doc->contentType = $file->getClientMimeType();
         $doc->content = $this->getContents($file);
-        // $doc->text = $this->toText($file);
 
         return $doc;
     }
@@ -98,10 +97,5 @@ class Upload extends Controller
         fclose($fh);
 
         return $bin;
-    }
-
-    private function toText(UploadedFile $file)
-    {
-        return shell_exec(config('ocr.ocr_pdf') . " " . $file->getRealPath() . " deu"); // eng : english, deu: german
     }
 }

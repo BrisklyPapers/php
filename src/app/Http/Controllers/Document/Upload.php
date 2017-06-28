@@ -56,6 +56,9 @@ class Upload extends Controller
                     array_values($tags)
                 );
 
+                // TODO: use queue
+                shell_exec('cd /var/www && php artisan document:parsetext ' . $result['_id'] . ' > /dev/null &');
+
                 if ($result['_shards']['successful']) {
                     $data[] = ['fileName' => $file->getClientOriginalName(), 'url' => $this->url->route('download-document', ['id' => $result['_id']])];
                 } else {
@@ -67,6 +70,21 @@ class Upload extends Controller
 
 
         return $response->setData($data);
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return Attachment
+     */
+    private function createAttachment(UploadedFile $file)
+    {
+        $doc = new Attachment();
+        $doc->fileName = $file->getClientOriginalName();
+        $doc->contentType = $file->getClientMimeType();
+        $doc->content = $this->getContents($file);
+        // $doc->text = $this->toText($file);
+
+        return $doc;
     }
 
     /**
@@ -85,20 +103,5 @@ class Upload extends Controller
     private function toText(UploadedFile $file)
     {
         return shell_exec(config('ocr.ocr_pdf') . " " . $file->getRealPath() . " deu"); // eng : english, deu: german
-    }
-
-    /**
-     * @param UploadedFile $file
-     * @return Attachment
-     */
-    private function createAttachment(UploadedFile $file)
-    {
-        $doc = new Attachment();
-        $doc->fileName = $file->getClientOriginalName();
-        $doc->contentType = $file->getClientMimeType();
-        $doc->content = $this->getContents($file);
-        $doc->text = $this->toText($file);
-
-        return $doc;
     }
 }

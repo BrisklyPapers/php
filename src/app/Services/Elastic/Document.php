@@ -48,6 +48,10 @@ class Document
             ]
         ];
 
+        if (!empty($document->id)) {
+            $params['id'] = $document->id;
+        }
+
         $response = $this->elastic->index($params);
 
         return $response;

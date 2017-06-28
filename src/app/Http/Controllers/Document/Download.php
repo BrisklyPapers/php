@@ -38,4 +38,17 @@ class Download extends Controller
             'Content-Disposition' => 'inline; filename="'.$document->fileName.'"'
         ]);
     }
+
+    /**
+     * Show the profile for the given user.
+     *
+     * @param $id
+     * @return JsonResponse
+     */
+    public function text($id)
+    {
+        $document = $this->elasticDoc->loadById($id);
+
+        return new \Illuminate\Http\Response($document->text);
+    }
 }

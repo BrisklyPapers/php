@@ -103,6 +103,11 @@ class Document
                             ]
                         ]
                     ]
+                ],
+                'highlight' => [
+                    'fields' => [
+                        self::FIELD_TEXT => (object) []
+                    ]
                 ]
             ],
         ];
@@ -129,6 +134,9 @@ class Document
         $attachment->contentType = $response['_source']['file']['_content_type'];
         $attachment->fileName = $response['_source']['file']['_name'];
         $attachment->text = $response['_source']['text'];
+        if (isset($response['highlight']['text'])) {
+            $attachment->highlighted = $response['highlight']['text'];
+        }
         $attachment->tags = $response['_source']['tags'];
         $attachment->id = isset($response['_id']) ? $response['_id'] : null;
 

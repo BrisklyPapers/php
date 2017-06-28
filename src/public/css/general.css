@@ -35,6 +35,13 @@ footer {
     border-top: 1px solid #b7b7b7;
 }
 
-pre {
+.search_results {
     background-color: #f1f1f1;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+.search_results em {
+    background-color: #ffff00;
+    padding: 1px;
 }

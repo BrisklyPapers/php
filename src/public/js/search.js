@@ -32,11 +32,10 @@ $(window).load(function () {
                             href: file.url,
                             target: "_blank"
                         });
-                        $text = $('<pre>', {
-                            text: file.text
+                        $div = $('<div>', {
+                            class: 'search_results'
                         });
-                        $div = $('<div>');
-                        $div.append($link).append($('<br/>')).append($text);
+                        $div.append($link).append($('<br/>')).append(file.text);
 
                         $('#response').prepend($div);
                     });

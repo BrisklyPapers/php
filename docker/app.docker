@@ -21,4 +21,6 @@ RUN npm install -g grunt-cli
 # https://ubuntu.flowconsult.at/linux/ocr-tesseract-text-recognition-ubuntu-14-04/
 RUN apt-get install -y imagemagick tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu poppler-utils
 
+ADD ./app/php-user.ini /usr/local/etc/php/conf.d
+
 WORKDIR /var/www

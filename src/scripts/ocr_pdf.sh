@@ -7,13 +7,8 @@ then
     LANG='eng'
 fi
 
-OIFS=$IFS
-IFS=";" read -ra TYPES <<< `file -ib $FILEPATH`
-FILETYPE=${TYPES[0]}
-
-IFS="=" read -ra TMP_CHARSET <<< "${TYPES[1]}"
-CHARSET=${TMP_CHARSET[1]}
-IFS=$OIFS
+FILETYPE=`file -b --mime-type $FILEPATH`
+CHARSET=`file -b --mime-encoding $FILEPATH`
 
 case "$FILETYPE" in
 'text/plain')

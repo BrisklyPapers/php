@@ -32,7 +32,7 @@ case "$FILETYPE" in
     cat "${OUTFILE}.txt"
     rm "${OUTFILE}.txt"
     ;;
-'image/jpeg')
+'image/'*)
     OUTFILE=$(mktemp /tmp/ocr.XXXXXXXXX)
 
     tesseract "$FILEPATH" "$OUTFILE" -l $LANG > /dev/null 2>&1

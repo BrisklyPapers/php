@@ -23,7 +23,7 @@ Route::get('/upload', ['middleware' => 'cors', function () {
     return view('upload');
 }]);
 
-Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')->name('upload-document');
+Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')->name('upload-document')->middleware('cors');
 
 Route::get('/document/search/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');
 Route::get('/document/search/{id}/text', '\App\Http\Controllers\Document\Download@text');

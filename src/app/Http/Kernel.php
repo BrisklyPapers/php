@@ -47,7 +47,7 @@ class Kernel extends HttpKernel
             StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             ShareErrorsFromSession::class,
-            VerifyCsrfToken::class,
+            // VerifyCsrfToken::class,
             SubstituteBindings::class,
         ],
 

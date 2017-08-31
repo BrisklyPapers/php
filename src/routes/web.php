@@ -11,27 +11,27 @@
 |
 */
 
-Route::get('/ajax', ['middleware' => 'cors', function () {
+Route::get('/', ['middleware' => 'cors', function () {
     return view('pages.home');
 }]);
 
-Route::get('/ajax/search', ['middleware' => 'cors', function () {
+Route::get('/search', ['middleware' => 'cors', function () {
     return view('search');
 }]);
 
-Route::get('/ajax/upload', ['middleware' => 'cors', function () {
+Route::get('/upload', ['middleware' => 'cors', function () {
     return view('upload');
 }]);
 
-Route::post('/ajax/document', '\App\Http\Controllers\Document\Upload@upload')->name('upload-document')->middleware('cors');
+Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')->name('upload-document')->middleware('cors');
 
-Route::get('/ajax/document/search/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');
-Route::get('/ajax/document/search/{id}/text', '\App\Http\Controllers\Document\Download@text');
+Route::get('/document/search/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');
+Route::get('/document/search/{id}/text', '\App\Http\Controllers\Document\Download@text');
 
-Route::get('/ajax/document/search', '\App\Http\Controllers\Document\Search@search')
+Route::get('/document/search', '\App\Http\Controllers\Document\Search@search')
     ->name('search-document')
     ->middleware('cors');
 
-Route::get('/ajax/document/{id}/parse/text', '\App\Http\Controllers\Document\Parse@text')->name('parse-document-text');
+Route::get('/document/{id}/parse/text', '\App\Http\Controllers\Document\Parse@text')->name('parse-document-text');
 
-Route::get('/ajax/tags', '\App\Http\Controllers\Tags@search')->name('search-tags');
+Route::get('/tags', '\App\Http\Controllers\Tags@search')->name('search-tags');

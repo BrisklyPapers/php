@@ -20,6 +20,7 @@ before_script:
 before_install:
   - mysql -e 'create database brisklypapers_testing;'
   - sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch mapper-attachments
+  - sudo service elasticsearch restart
 
 env:
   - APP_ENV=travis

@@ -1,5 +1,7 @@
 # Briskly Papers
 
+[![Build Status](https://travis-ci.org/BrisklyPapers/php.svg?branch=master)](https://travis-ci.org/BrisklyPapers/php)
+
 ## About Briskly Papers
 A fast and simple document store. Its goal is to provide a simple way to store and find all your documents.
 

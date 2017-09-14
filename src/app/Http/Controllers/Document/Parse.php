@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Document;
 
-use App\Models\Elastic\Attachment;
-use App\Services\Elastic\Document;
+use App\Models\Elasticsearch\Attachment;
+use App\Services\Elasticsearch\Document;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 

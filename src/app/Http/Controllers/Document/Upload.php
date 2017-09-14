@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Document;
 
-use App\Models\Elastic\Attachment;
-use App\Services\Elastic\Document;
+use App\Models\Elasticsearch\Attachment;
+use App\Services\Document\Parse;
+use App\Services\Document\Store;
+use App\Services\Elasticsearch\Document;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -21,16 +23,28 @@ class Upload extends Controller
      * @var UrlGenerator
      */
     private $url;
+    /**
+     * @var UploadService
+     */
+    private $upload;
+    /**
+     * @var Parse
+     */
+    private $parse;
 
     /**
      * UploadController constructor.
      * @param Document $elasticDoc
      * @param UrlGenerator $url
+     * @param Store $store
+     * @param Parse $parse
      */
-    public function __construct(Document $elasticDoc, UrlGenerator $url)
+    public function __construct(Document $elasticDoc, UrlGenerator $url, Store $store, Parse $parse)
     {
         $this->elasticDoc = $elasticDoc;
         $this->url = $url;
+        $this->upload = $store;
+        $this->parse = $parse;
     }
 
     /**
@@ -42,60 +56,53 @@ class Upload extends Controller
     public function upload(Request $request)
     {
         $response = new JsonResponse();
-        $data = array();
 
-        $tags = $request->request->has('tags')
-            ? $request->request->get('tags')
-            : [];
+        $tags = $this->getTags($request);
+        $rawFiles = $this->getUploadedFiles($request);
 
-        /** @var UploadedFile $file */
-        foreach ($request->files->all() as $files) {
-            foreach ($files as $file) {
-                $result = $this->elasticDoc->storeDocument(
-                    $this->createAttachment($file),
-                    array_values($tags)
-                );
+        $data = $this->upload->upload($tags, $rawFiles);
 
-                // TODO: use queue
-                shell_exec('cd /var/www && php artisan document:parsetext ' . $result['_id'] . ' > /dev/null &');
-
-                if ($result['_shards']['successful']) {
-                    $data[] = ['fileName' => $file->getClientOriginalName(), 'url' => $this->url->route('download-document', ['id' => $result['_id']])];
-                } else {
-                    $response->setStatusCode(400);
-                    $data[] = ['fileName' => $file->getClientOriginalName()];
-                }
+        $storedFiles = array();
+        foreach ($data as $file) {
+            if (isset($file['_id'])) {
+                $storedFiles[] = $file;
+            } else {
+                $response->setStatusCode(400);
             }
         }
 
+        $this->parse->parse($storedFiles);
 
         return $response->setData($data);
     }
 
     /**
-     * @param UploadedFile $file
-     * @return Attachment
+     * @param Request $request
+     * @return array
      */
-    private function createAttachment(UploadedFile $file)
+    private function getUploadedFiles(Request $request)
     {
-        $doc = new Attachment();
-        $doc->fileName = $file->getClientOriginalName();
-        $doc->contentType = $file->getClientMimeType();
-        $doc->content = $this->getContents($file);
-
-        return $doc;
+        $rawFiles = array();
+        /** @var UploadedFile $file */
+        foreach ($request->files->all() as $files) {
+            foreach ($files as $file) {
+                $rawFiles[] = $file;
+            }
+        }
+        return $rawFiles;
     }
 
     /**
-     * @param UploadedFile $file
-     * @return string
+     * @param Request $request
+     * @return array
      */
-    private function getContents(UploadedFile $file)
+    private function getTags(Request $request)
     {
-        $fh = fopen($file->getRealPath(), 'r');
-        $bin = fread($fh, $file->getSize());
-        fclose($fh);
+        $tags = $request->request->has('tags')
+            ? (array)$request->request->get('tags')
+            : [];
 
-        return $bin;
+        return $tags;
     }
+
 }

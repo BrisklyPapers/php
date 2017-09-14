@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Document;
 
-use App\Services\Elastic\Document;
+use App\Services\Elasticsearch\Document;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

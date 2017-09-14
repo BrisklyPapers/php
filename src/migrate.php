@@ -20,7 +20,7 @@ $client = ClientBuilder::create()
     ->build();
 
 $params = [
-    'index' => 'brisklypapers',
+    'index' => 'brisklypapers_testing',
     'type' => 'documents',
     'body' => []
 ];
@@ -29,7 +29,7 @@ $response = $client->index($params);
 print_r($response);
 
 $params = [
-    'index' => 'brisklypapers',
+    'index' => 'brisklypapers_testing',
     'type'  => 'documents',
     'body' => [
         'properties' => [

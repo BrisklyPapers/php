@@ -6,4 +6,5 @@ return [
     'user' => env('ELASTIC_USER', 'elastic'),
     'password' => env('ELASTIC_PASSWORD', 'changeme'),
     'port' => env('ELASTIC_PORT', 9200),
+    'index_prefix' => env('ELASTIC_INDEX_PREFIX', '')
 ];

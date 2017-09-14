@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Services\Elastic;
+namespace App\Services\Elasticsearch;
 
-use App\Models\Elastic\Attachment;
+use App\Models\Elasticsearch\Attachment;
 use Elasticsearch\Client;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 
 class Document
 {
-    const INDEX = 'brisklypapers';
     const TYPE = 'documents';
     const FIELD_DOCUMENT = 'file';
     const FIELD_TAGS = 'tags';
     const FIELD_TEXT = 'text';
+
     /**
      * @var Client
      */
@@ -26,6 +27,11 @@ class Document
         $this->elastic = $elastic;
     }
 
+    protected function getIndexName()
+    {
+        return 'brisklypapers' . config('elasticsearch.index_prefix');
+    }
+
     /**
      * @param Attachment $document
      * @param array $tags
@@ -35,7 +41,7 @@ class Document
     public function storeDocument(Attachment $document, array $tags = [])
     {
         $params = [
-            'index' => self::INDEX,
+            'index' => $this->getIndexName(),
             'type' => self::TYPE,
             'body' => [
                 self::FIELD_DOCUMENT => [
@@ -64,12 +70,17 @@ class Document
     public function loadById($id)
     {
         $params = [
-            'index' => self::INDEX,
+            'index' => $this->getIndexName(),
             'type' => self::TYPE,
             'id' => $id,
         ];
 
-        $response = $this->elastic->get($params);
+        try {
+            $response = $this->elastic->get($params);
+        } catch(Missing404Exception $e) {
+            $response = ['found' => false];
+
+        }
 
         if (!$response['found']) {
             throw new \InvalidArgumentException("$id not found");
@@ -89,17 +100,27 @@ class Document
         $attachments = [];
 
         $params = [
-            'index' => self::INDEX,
+            'index' => $this->getIndexName(),
             'type' => self::TYPE,
             'body' => [
                 'query' => [
                     'bool' => [
                         'should' => [
-                            'multi_match' => [
-                                'query' => $text,
-                                'type' => 'best_fields',
-                                'fuzziness' => 'AUTO',
-                                'fields' => [self::FIELD_TAGS, self::FIELD_TEXT]
+                            [
+                                'multi_match' => [
+                                    'query' => $text,
+                                    'type' => 'best_fields',
+                                    //'fuzziness' => 'AUTO',
+                                    'fields' => [self::FIELD_TEXT]
+                                ]
+                            ],
+                            [
+                                'multi_match' => [
+                                    'query' => $text,
+                                    'type' => 'best_fields',
+                                    //'fuzziness' => 'AUTO',
+                                    'fields' => [self::FIELD_TAGS]
+                                ]
                             ]
                         ]
                     ]
@@ -146,7 +167,7 @@ class Document
     public function searchTags($text)
     {
         $params = [
-            'index' => self::INDEX,
+            'index' => $this->getIndexName(),
             'type' => self::TYPE,
             'body' => [
                 'size' => 0,
@@ -174,5 +195,49 @@ class Document
         }
 
         return $tags;
+    }
+
+    /**
+     * Drop all documents
+     */
+    public function dropIndex()
+    {
+        try {
+            $this->elastic->indices()->delete(['index' => $this->getIndexName()]);
+        } catch(Missing404Exception $e) {
+
+
+        }
+    }
+
+    public function ensureIndex()
+    {
+        $params = [
+            'index' => 'brisklypapers_testing',
+            'type' => 'documents',
+            'body' => []
+        ];
+
+        $this->elastic->index($params);
+
+        $params = [
+            'index' => 'brisklypapers_testing',
+            'type'  => 'documents',
+            'body' => [
+                'properties' => [
+                    'file' => [
+                        'type' => 'attachment',
+                    ],
+                    'tags' => [
+                        'type' => 'keyword',
+                    ],
+                    'text' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ]
+        ];
+
+        $this->elastic->indices()->putMapping($params);
     }
 }

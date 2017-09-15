@@ -13,6 +13,8 @@ services:
 before_script:
   - sleep 10
   - cd ./src
+  - mkdir build
+  - mkdir build/logs
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate

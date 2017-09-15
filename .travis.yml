@@ -3,7 +3,8 @@ language: php
 php:
   - 7.1
 
-script: vendor/bin/phpunit --coverage-clover=coverage.xml
+env:
+  - APP_ENV=travis
 
 services:
   - elasticsearch
@@ -22,5 +23,8 @@ before_install:
   - sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch mapper-attachments
   - sudo service elasticsearch restart
 
-env:
-  - APP_ENV=travis
+script:
+  - vendor/bin/phpunit --coverage-clover=coverage.xml
+
+after_success:
+  - travis_retry php vendor/bin/coveralls --coverage_clover=coverage.xml

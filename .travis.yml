@@ -23,7 +23,7 @@ before_script:
 before_install:
   - mysql -e 'create database brisklypapers_testing;'
   - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.6.1.deb && sudo dpkg -i --force-confnew elasticsearch-6.6.1.deb && sudo service elasticsearch restart
-  - sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch ingest-attachments
+  - sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch ingest-attachment
   - sudo service elasticsearch restart
 
 script:

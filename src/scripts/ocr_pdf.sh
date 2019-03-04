@@ -17,20 +17,22 @@ case "$FILETYPE" in
 'application/pdf')
     OUTFILE=$(mktemp /tmp/ocr.XXXXXXXXX)
 
-    pdftotext "$FILEPATH" "${OUTFILE}.txt"
-    FILESIZE=$(wc -w < "$OUTFILE")
+    pdftotext $FILEPATH ${OUTFILE}.txt
+    FILESIZE=$(wc -w < ${OUTFILE}.txt)
 
     if [[ $FILESIZE -lt $MIN_WORDS ]]
     then
+        rm ${OUTFILE}
         convert -density 300 "$FILEPATH" -depth 8 -strip -background white \
                 -alpha off ./temp.tiff > /dev/null 2>&1
-        tesseract ./temp.tiff "$OUTFILE" -l $LANG > /dev/null 2>&1
+        tesseract ./temp.tiff ${OUTFILE} -l $LANG > /dev/null 2>&1
         rm ./temp.tiff
-        FILESIZE=$(wc -w < "${OUTFILE}.txt")
+        FILESIZE=$(wc -w < ${OUTFILE}.txt)
     fi
 
-    cat "${OUTFILE}.txt"
-    rm "${OUTFILE}.txt"
+    cat ${OUTFILE}.txt
+    rm ${OUTFILE}.txt
+
     ;;
 'image/'*)
     OUTFILE=$(mktemp /tmp/ocr.XXXXXXXXX)

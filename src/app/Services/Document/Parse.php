@@ -16,7 +16,7 @@ class Parse
         /** @var UploadedFile $file */
         foreach ($fileIds as $file) {
             // TODO: use a message queue
-            shell_exec('cd /var/www && php artisan document:parsetext ' . $file['_id'] . ' > /dev/null &');
+            shell_exec('cd /var/www && /usr/bin/nohup php artisan document:parsetext ' . $file['_id'] . ' > /dev/null &');
         }
     }
 }

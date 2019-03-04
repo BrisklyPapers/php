@@ -15,14 +15,20 @@ Route::get('/', ['middleware' => 'cors', function () {
     return "";
 }]);
 
-Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')->name('upload-document');
+Route::post('/document', '\App\Http\Controllers\Document\Upload@upload')
+    ->name('upload-document');
 
-Route::get('/document/search/{id}', '\App\Http\Controllers\Document\Download@download')->name('download-document');
+Route::get('/document/search/{id}', '\App\Http\Controllers\Document\Download@download');
+Route::get('/ajax/document/search/{id}', '\App\Http\Controllers\Document\Download@download')
+    ->name('download-document');
+
 Route::get('/document/search/{id}/text', '\App\Http\Controllers\Document\Download@text');
 
 Route::get('/document/search', '\App\Http\Controllers\Document\Search@search')
     ->name('search-document');
 
-Route::get('/document/{id}/parse/text', '\App\Http\Controllers\Document\Parse@text')->name('parse-document-text');
+Route::get('/document/{id}/parse/text', '\App\Http\Controllers\Document\Parse@text')
+    ->name('parse-document-text');
 
-Route::get('/tags', '\App\Http\Controllers\Tags@search')->name('search-tags');
+Route::get('/tags', '\App\Http\Controllers\Tags@search')
+    ->name('search-tags');

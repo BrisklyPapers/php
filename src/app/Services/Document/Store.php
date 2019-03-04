@@ -45,10 +45,16 @@ class Store
                 array_values($tags)
             );
 
-            if ($result['_shards']['successful']) {
-                $data[] = ['fileName' => $file->getClientOriginalName(), 'url' => $this->url->route('download-document', ['id' => $result['_id']])];
+            if (isset($result['_shards']['successful'])) {
+                $data[] = [
+                    'fileName' => $file->getClientOriginalName(),
+                    'url' => $this->url->route('download-document', ['id' => $result['_id']]),
+                    '_id' => $result['_id']
+                ];
             } else {
-                $data[] = ['fileName' => $file->getClientOriginalName()];
+                $data[] = [
+                    'fileName' => $file->getClientOriginalName()
+                ];
             }
         }
 

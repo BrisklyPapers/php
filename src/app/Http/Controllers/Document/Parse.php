@@ -50,7 +50,7 @@ class Parse extends Controller
 
         file_put_contents($fileName, $document->content);
 
-        $text = shell_exec(config('ocr.ocr_pdf') . " " . $fileName . " deu"); // eng : english, deu: german
+        $text = shell_exec(config('ocr.ocr_pdf') . " " . $fileName . " deu+eng"); // eng : english, deu: german
 
         unlink($fileName);
 

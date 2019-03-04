@@ -44,7 +44,17 @@ class InitElasticsearch extends Migration
             'body' => [
                 'properties' => [
                     'file' => [
-                        'type' => 'attachment',
+                        'properties' => [
+                            '_content' =>[
+                                'type' => 'text',
+                            ],
+                            '_content_type' => [
+                                'type' => 'keyword',
+                            ],
+                            '_name' => [
+                                'type' => 'text',
+                            ],
+                        ]
                     ],
                     'tags' => [
                         'type' => 'keyword',

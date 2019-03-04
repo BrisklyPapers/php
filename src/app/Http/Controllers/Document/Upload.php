@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Document;
 
-use App\Models\Elasticsearch\Attachment;
 use App\Services\Document\Parse;
 use App\Services\Document\Store;
 use App\Services\Elasticsearch\Document;
-use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

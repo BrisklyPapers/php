@@ -79,7 +79,6 @@ class Document
             $response = $this->elastic->get($params);
         } catch(Missing404Exception $e) {
             $response = ['found' => false];
-
         }
 
         if (!$response['found']) {
@@ -213,7 +212,7 @@ class Document
     public function ensureIndex()
     {
         $params = [
-            'index' => 'brisklypapers_testing',
+            'index' => $this->getIndexName(),
             'type' => 'documents',
             'body' => []
         ];
@@ -221,12 +220,22 @@ class Document
         $this->elastic->index($params);
 
         $params = [
-            'index' => 'brisklypapers_testing',
+            'index' => $this->getIndexName(),
             'type'  => 'documents',
             'body' => [
                 'properties' => [
                     'file' => [
-                        'type' => 'attachment',
+                        'properties' => [
+                            '_content' =>[
+                                'type' => 'text',
+                            ],
+                            '_content_type' => [
+                                'type' => 'keyword',
+                            ],
+                            '_name' => [
+                                'type' => 'text',
+                            ],
+                        ]
                     ],
                     'tags' => [
                         'type' => 'keyword',

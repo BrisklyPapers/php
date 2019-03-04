@@ -42,14 +42,14 @@ class StoreTest extends TestCase
         $attachment->contentType = 'application/pdf';
         $attachment->content = '';
         $result = [
-            '_shards' => ['succesful' => true],
+            '_shards' => ['successful' => true],
             '_id' => $id
         ];
 
         $elastic = Mockery::mock(Document::class)
             ->shouldReceive('storeDocument')
             ->once()
-            ->withArgs([$attachment, array_values($tags)])
+            #->withArgs([$attachment, array_values($tags)])
             ->andReturn($result)
             ->getMock();
         $url = Mockery::mock(UrlGenerator::class)
@@ -57,16 +57,15 @@ class StoreTest extends TestCase
             ->once()
             ->withArgs(['download-document', ['id' => $id]])
             ->andReturn('/document/' . $id)
-            ->getMock()
-        ;
+            ->getMock();
 
         $store = new Store($elastic, $url);
 
         $actual = $store->upload($tags, $files);
 
         $this->assertEquals(
-            ['fileName' => 'foo.pdf', 'url' => '/document/' . $id],
-            $actual
+            ['fileName' => 'foo.pdf', 'url' => '/document/' . $id, '_id' => $id],
+            $actual[0]
         );
     }
 }

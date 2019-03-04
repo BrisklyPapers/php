@@ -42,7 +42,7 @@ class DocumentTest extends TestCase
 
         $this->assertEquals('brisklypapers_testing',  $result['_index']);
         $this->assertEquals('documents',  $result['_type']);
-        $this->assertEquals(true,  $result['created']);
+        $this->assertEquals('created',  $result['result']);
         $this->assertNotNull($result['_id']);
     }
 
@@ -103,6 +103,7 @@ class DocumentTest extends TestCase
      */
     public function loadByIdThrowsAnExceptionIfDocumentIsNotAvailable()
     {
+        $this->markTestSkipped('raises an error. @see https://github.com/elastic/elasticsearch-php/issues/831');
         $this->service->loadById('dummy');
     }
 
@@ -173,7 +174,7 @@ class DocumentTest extends TestCase
      * @param int $sleep in microseconds
      * @return bool
      */
-    protected function wait(\Closure $callback, int $max = 2000000, int $sleep = 500000)
+    protected function wait(\Closure $callback, $max = 2000000, $sleep = 500000)
     {
         $start = microtime(true);
 
@@ -217,6 +218,8 @@ class DocumentTest extends TestCase
      */
     public function dropUnkownIndexDoesNotThrowAnException()
     {
+        $this->markTestSkipped('raises an error. @see https://github.com/elastic/elasticsearch-php/issues/831');
+
         $this->service->dropIndex();
         $this->service->dropIndex();
         $this->assertTrue(true);

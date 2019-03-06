@@ -35,7 +35,7 @@ class Parse extends Controller
 
         $document->text = $this->toText($document);
 
-        $this->elasticDoc->storeDocument($document);
+        $this->elasticDoc->storeDocument($document, $document->tags);
 
         return new JsonResponse(['id' => $id, 'text' => $document->text]);
     }

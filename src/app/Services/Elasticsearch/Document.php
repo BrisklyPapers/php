@@ -58,9 +58,7 @@ class Document
             $params['id'] = $document->id;
         }
 
-        $response = $this->elastic->index($params);
-
-        return $response;
+        return $this->elastic->index($params);
     }
 
     /**
